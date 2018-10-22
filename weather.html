@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <title>Weather Widget by Flamsteed Zhao</title>
+    
+	<link rel="stylesheet" href="http://classes.engineering.wustl.edu/cse330/content/weather.css">
+</head>
+
+<body>
+
+    <div class="weather" id="weatherWidget">
+		<div class="weather-location"></div>
+		<div class="weather-humidity"></div>
+		<div class="weather-temp"></div>
+		<img class="weather-tomorrow" alt="weather-tomorrow" src = "http://us.yimg.com/i/us/nws/weather/gr/"/>
+		<img class="weather-dayaftertomorrow" alt="weather-dayaftertomorrow" src = "http://us.yimg.com/i/us/nws/weather/gr/"/>
+	</div>
+    <button id="button">Reload</button>
+    <script>
+   		document.addEventListener("DOMContentLoaded", fetchWeather, false);
+	 	document.getElementById("button").addEventListener("click", fetchWeather, false);
+    	function fetchWeather() {
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.open("GET", "https://classes.engineering.wustl.edu/cse330/content/weather_json.php", true);
+			xmlHttp.addEventListener("load", ajaxCallback, false);
+			xmlHttp.send(null);
+		}
+		function ajaxCallback(event) {
+			var jsonData = JSON.parse(event.target.responseText);
+			var city = document.createElement("strong");
+			city.textContent = jsonData.location.city;
+			var state = document.createTextNode(jsonData.location.state);
+			var location = document.getElementsByClassName("weather-location")[0];
+			var humidity = document.createTextNode(jsonData.atmosphere.humidity);
+			var humidity1 =  document.getElementsByClassName("weather-humidity")[0];
+			var current = document.createTextNode(jsonData.current.temp);
+			var current1 =  document.getElementsByClassName("weather-temp")[0];
+			while (location.lastChild) {location.removeChild(location.lastChild);}
+			document.getElementsByClassName("weather-location")[0].appendChild(city);
+			document.getElementsByClassName("weather-location")[0].appendChild(state);
+			while (humidity1.lastChild) {humidity1.removeChild(humidity1.lastChild);}
+			document.getElementsByClassName("weather-humidity")[0].appendChild(humidity);
+			while (current1.lastChild) {current1.removeChild(current1.lastChild);}
+			document.getElementsByClassName("weather-temp")[0].appendChild(current);
+			document.getElementsByClassName("weather-tomorrow")[0].src = "http://us.yimg.com/i/us/nws/weather/gr/"+jsonData.tomorrow.code+"ds.png";
+			document.getElementsByClassName("weather-dayaftertomorrow")[0].src = "http://us.yimg.com/i/us/nws/weather/gr/"+jsonData.dayafter.code+"ds.png";
+		}
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+<title>Calculator by Flamsteed Zhao</title>
+<h1>A Simple Two Numbers JS Calculator</h1>
+</head>
+<body>
+	<p>
+		<label for="firstnum">First Number:</label>
+		<input type="text" name="firstnum" id="firstnum"/>
+	</p>
+	<p>
+		<label for="secondnum">Second Number:</label>
+		<input type="text" name="secondnum" id="secondnum"/>
+	</p>
+	<p>
+		Operation: 
+		<input type="radio" name="operation" value="plus" id="plus" checked="checked" /> 
+		<label for="plus">+</label>
+		<input type="radio" name="operation" value="subtract" id="subtract"/> 
+		<label for="subtract">-</label> 
+		<input type="radio" name="operation" value="multiply" id="multiply"/> 
+		<label for="multiply">*</label> 
+		<input type="radio" name="operation" value="divide" id="divide"/> 
+		<label for="divide">/</label> 
+	</p>
+	<p>
+		<br><br>
+		<output id="Answer">Answer: </output>
+	</p>
+	 
+	<script>
+		document.addEventListener("DOMContentLoaded",calculate, false);
+		function calculate(){
+			var first = parseFloat(document.getElementById("firstnum").value);
+			var second = parseFloat(document.getElementById("secondnum").value);
+			var plus = document.getElementById("plus");
+			var subtract = document.getElementById("subtract");
+			var multiply = document.getElementById("multiply");
+			var divide = document.getElementById("divide");
+			var output = document.getElementById("Answer");
+			var ans = 0;
+			if(plus.checked){
+				ans = +first + +second;
+				output.textContent = first + "+" + second + "=" + ans;
+			}else if(subtract.checked){
+				ans = first - second;
+				output.textContent = first + "-" + second + "=" + ans;
+			}else if(multiply.checked){
+				ans = first * second;
+				output.textContent = first + "*" + second + "=" + ans;
+			}else if(divide.checked){
+				if(second=='0'){
+					output.textContent = "Cannot divide by 0";
+				}else{
+					ans = first / second;
+				output.textContent = first + "/" + second + "=" + ans;
+				}
+			}	
+		}
+		document.getElementById("firstnum").addEventListener("change", calculate, false);
+		document.getElementById("secondnum").addEventListener("change", calculate, false);
+		document.getElementById("plus").addEventListener("click", calculate, false);
+        document.getElementById("subtract").addEventListener("click", calculate, false);
+        document.getElementById("multiply").addEventListener("click", calculate, false);
+        document.getElementById("divide").addEventListener("click", calculate, false);
+	</script>
+</body>
+</html>
