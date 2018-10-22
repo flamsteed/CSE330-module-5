@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Calendar</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script>
+		var token;
+	</script>
+</head>
+<body>
+<h1>Calendar</h1>
+<br>
+<hr>
+<h3 id="month">3/2018</h3>
+<table id="tab" class="table table-bordered">
+</table>
+<button id="prev_month_btn">previous month</button>
+<button id="next_month_btn">next month</button>
+<script src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
+<script src="display.js"></script>
+<script>
+    // For our purposes, we can keep the current month in a variable in the global scope
+    var currentMonth = new Month(2018, 2); //
+    updateCalendar();
+
+    // Change the month when the "next" button is pressed
+    document.getElementById("next_month_btn").addEventListener("click", function(event){
+        currentMonth = currentMonth.nextMonth(); // Previous month would be currentMonth.prevMonth()
+        updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+        document.getElementById("month").innerHTML = currentMonth.month+1+"/"+currentMonth.year;
+    }, false);
+    document.getElementById("prev_month_btn").addEventListener("click", function(event){
+        currentMonth = currentMonth.prevMonth(); // Previous month would be currentMonth.prevMonth()
+        updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+        document.getElementById("month").innerHTML = currentMonth.month+1+"/"+currentMonth.year;
+    }, false);
+
+
+    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
+    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
+    function updateCalendar(){
+        var weeks = currentMonth.getWeeks();
+        document.getElementById("tab").innerHTML = "";
+        var th = document.createElement("thead");
+        document.getElementById("tab").appendChild(th);
+        var tr = document.createElement("tr");
+        th.appendChild(tr);
+        var sun = document.createElement("th");
+        sun.appendChild(document.createTextNode("Sun"));
+        tr.appendChild(sun);
+        sun.setAttribute("scope","col")
+        var mon = document.createElement("th");
+        mon.appendChild(document.createTextNode("Mon"));
+        tr.appendChild(mon);
+        mon.setAttribute("scope","col")
+        var tue = document.createElement("th");
+        tue.appendChild(document.createTextNode("Tue"));
+        tr.appendChild(tue);
+        tue.setAttribute("scope","col")
+        var wed = document.createElement("th");
+        wed.appendChild(document.createTextNode("Wed"));
+        tr.appendChild(wed);
+        wed.setAttribute("scope","col")
+        var thu = document.createElement("th");
+        thu.appendChild(document.createTextNode("Thu"));
+        tr.appendChild(thu);
+        thu.setAttribute("scope","col")
+        var fri = document.createElement("th");
+        fri.appendChild(document.createTextNode("Fri"));
+        tr.appendChild(fri);
+        fri.setAttribute("scope","col")
+        var sat = document.createElement("th");
+        sat.appendChild(document.createTextNode("Sat"));
+        tr.appendChild(sat);
+        sat.setAttribute("scope","col")
+        var idDay = 1;
+        for(var w in weeks){
+            var days = weeks[w].getDates();
+            // days contains normal JavaScript Date objects.
+            var row = document.createElement("tr");
+            document.getElementById("tab").appendChild(row);
+            for(var d in days){
+                // You can see console.log() output in your JavaScript debugging tool, like Firebug,
+                // WebWit Inspector, or Dragonfly.
+                var cell = document.createElement("td");
+                row.appendChild(cell);
+                var div = document.createElement("div");
+                cell.appendChild(div);
+                var h = document.createElement("h4");
+                div.appendChild(h);
+                if(days[d].getMonth()==currentMonth.month){
+                    div.setAttribute("id","day"+idDay);
+                    //console.log(document.createTextNode(days[d].toISOString().substring(5,10)));
+                    h.appendChild(document.createTextNode(days[d].toISOString().substring(5,10)));
+                    idDay++;
+                }
+            }
+        }
+		if (token) 	displayEvent();
+    }
+</script>
+
+  <div id="login">
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login_btn">Log In</button>
+    <button id="register_btn">Register</button>
+  </div>
+
+  <div id="logout">
+    <button id="logout_btn">Logout</button>
+  </div>
+	<br>
+<h4>Tag Legend:</h4>
+<button type="button" class="btn btn-primary">School</button>
+<button type="button" class="btn btn-dark">None</button>
+<button type="button" class="btn btn-warning">Family</button>
+<button type="button" class="btn btn-success">Business</button>
+  <br>
+  <br>
+	<div id="addevent" style = "display: none;">
+		<h1>
+			Add new event below.
+		</h1>
+		<label for="date">Date </label>
+		<input type="text" id="date" placeholder="enter time"/>
+		<script>
+			$(function () {
+				$("#date").datepicker();
+			})
+		</script>
+		<label for="time">Time: </label>
+		<input type = "time" name = "time" id = "time" step = "1" required="Required"/>
+		<br>
+		<textarea name="events" cols="20" rows="5" id="events" placeholder="Enter the events needed to be added" 
+				required="required" ></textarea>
+		<br><br/>
+		<label>tag</label>
+		<select name="tag" id="tagtag">
+		  <option value="N">None</option>
+		  <option value="B">Business</option>
+		  <option value="F">Family</option>
+		  <option value="S">School</option>
+		</select>
+		<br><br/>
+		<button id = "add_btn" type = "submit">add</button>
+		<br><br/>
+		<button id = "addtopublic_btn" type = "submit">add to public</button>
+	</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="user.js"></script>
+</body>
+</html>
